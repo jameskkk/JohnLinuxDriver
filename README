@@ -1,0 +1,13 @@
+1. Install:
+	$ sudo insmod ./JohnDriver.ko
+        # /dev/JohnDriver is node path of driver，c is Character Device，60 is driver's Major ID，0 is driver's Minor ID.
+	$ sudo mknod /dev/JohnDriver c 60 0
+	# Change permission to 666 for everyone access.
+	$ sudo chmod 666 /dev/JohnDriver
+	$ echo -n 'Hello John' > /dev/JohnDriver
+	$ sudo dmesg | tail
+
+2. Uninstall
+   $ sudo rmmod JohnDriver
+   $ sudo rm /dev/JohnDriver
+   $ dmesg --clear
