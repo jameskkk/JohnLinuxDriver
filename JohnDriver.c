@@ -2,6 +2,9 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/fs.h>
+#include <linux/slab.h>
+#include <linux/reboot.h>
+#include <linux/string.h>
 
 #define John_MAJOR 60
 #define John_NAME "JohnDevice"
@@ -24,7 +27,19 @@ static ssize_t JohnDriver_read(struct file *filp, char *buf, size_t size, loff_t
 }
 
 static ssize_t JohnDriver_write(struct file *filp, const char *buf, size_t size, loff_t *f_pos) {
+    char *temp = (char *)kmalloc(sizeof(char) * size + 1, GFP_KERNEL);
     printk("<1>JohnDriver: write  (size=%zu)\n", size);
+    printk("<1>JohnDriver: write  %s\n", buf);
+
+    memset(temp, 0, size + 1);
+    strncpy(temp, buf, size);
+    if (strcmp(temp, "Hello") == 0) {
+	kfree(temp);
+	//kernel_power_off();
+	printk("<1>JohnDriver: Reboot");
+	kernel_restart("Restarting kernel!");
+    }
+    kfree(temp);
     return size;
 }
 

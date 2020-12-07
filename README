@@ -11,3 +11,9 @@
    $ sudo rmmod JohnDriver
    $ sudo rm /dev/JohnDriver
    $ dmesg --clear
+
+3. Mount at boot
+   $ sudo cp JohnDriver.ko /lib/modules/$(uname -r)/kernel/drivers/
+   $ echo 'JohnDriver' | sudo tee -a /etc/modules
+   $ sudo depmod
+   $ reboot
